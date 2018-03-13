@@ -7,6 +7,7 @@ body {
   background: #333;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100vh; }
 
 .row {
@@ -18,4 +19,46 @@ body {
   height: calc(100vh/4);
   border: 1px solid tomato;
   text-align: center;
-  line-height: calc(100vh/4); }
+  line-height: calc(100vh/4);
+  font-size: 60px;
+  color: #fff; }
+
+.choose-players {
+  width: 576px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 10px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22); }
+  .choose-players .title {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 10px; }
+  .choose-players .players a {
+    font-size: 120px;
+    text-decoration: none;
+    border: 1px solid tomato;
+    line-height: 75px;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease-in-out; }
+    .choose-players .players a:first-child {
+      color: #F44336; }
+    .choose-players .players a:last-child {
+      color: #FFEB3B; }
+    .choose-players .players a:hover {
+      box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+      transition: box-shadow 0.3s ease-in-out; }
+
+.winner-template {
+  text-align: center;
+  font-size: 60px;
+  color: #fff;
+  text-transform: uppercase; }
