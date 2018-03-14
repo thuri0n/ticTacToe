@@ -6,12 +6,11 @@ class TicTacToe {
         this.currentPlayer = '';
         this.lenghtHorizontal = 3;
         this.lenghtVertical = 3;
-        this.virtualBoard = [new Array(this.lenghtHorizontal), new Array(this.lenghtHorizontal), new Array(this.lenghtHorizontal)];
         this.choosePlayer();
     }
 
-    choosePlayer () {
-        this.templateChoosePlayer = `<div class="choose-players">
+    choosePlayer (preTemplate = '') {
+        this.templateChoosePlayer = `${preTemplate}<div class="choose-players">
                                        <div class="title">Выберите игрока</div>
                                        <div class="players">
                                          <a href="#" class="player" data-player="x">x</a>
@@ -29,6 +28,8 @@ class TicTacToe {
                 this.initGame();
             })
         }
+
+        return this.virtualBoard = [new Array(this.lenghtHorizontal), new Array(this.lenghtHorizontal), new Array(this.lenghtHorizontal)];
     }
 
     renderTemplate (string) {
@@ -81,17 +82,18 @@ class TicTacToe {
         };
 
         const templateWinner = (winner) => {
-            let template = `<div class="winner-template">Победитель '${winner}'</div>${this.templateChoosePlayer}`;
-            return this.renderTemplate(template);
+            let winnerTemplate = `<div class="winner-template">Победитель '${winner}'</div>`
+            return this.choosePlayer(winnerTemplate);
         };
 
         const winHorizontal = () => {
-            for(let indexRow = 0; indexRow <= this.virtualBoard.length - 1; indexRow++) {
+            for(let indexRow = 0; indexRow <= this.lenghtHorizontal - 1; indexRow++) {
                 let row = this.virtualBoard[indexRow];
                 let result = '';
                 for(let indexCell = 0; indexCell <= row.length - 1; indexCell++) {
-                    result += row[indexCell];
+                    result += this.virtualBoard[indexRow][indexCell];
                 }
+
                 if(result === repeatString('x', this.lenghtHorizontal)) {
                     return templateWinner('x');
                 } else if (result === repeatString('o', this.lenghtHorizontal)) {
@@ -101,11 +103,38 @@ class TicTacToe {
         };
 
         const winVertical = () => {
+            for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
+                let row = this.virtualBoard[indexRow];
+                let result = '';
+                for(let indexCell = 0; indexCell <= row.length - 1; indexCell++) {
+                    result += this.virtualBoard[indexCell][indexRow];
+                }
+
+                if(result === repeatString('x', this.lenghtVertical)) {
+                    return templateWinner('x');
+                } else if (result === repeatString('o', this.lenghtVertical)) {
+                    return templateWinner('o');
+                }
+            }
+        };
+
+        const winDiagonal = () => {
+            // [0][0] [1][1] [2][2]
+            // [0][2] [1][1] [2][0]
+        };
+
+        const draw = () => {
 
         };
 
         winHorizontal();
         winVertical();
+        winDiagonal();
+        draw();
+    }
+
+    resultGame(winner) {
+
     }
 }
 
