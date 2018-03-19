@@ -82,9 +82,18 @@ class TicTacToe {
         };
 
         const templateWinner = (winner) => {
-            let winnerTemplate = `<div class="winner-template">Победитель '${winner}'</div>`
+            let winnerTemplate = `<div class="winner-template">${winner}</div>`;
             return this.choosePlayer(winnerTemplate);
         };
+
+        const whoHasWon = (result) => {
+            if(result === repeatString('x', this.lenghtVertical)) {
+                return templateWinner('Победитель x');
+            } else if (result === repeatString('o', this.lenghtVertical)) {
+                return templateWinner('Победитель o');
+            }
+        };
+
 
         const winHorizontal = () => {
             for(let indexRow = 0; indexRow <= this.lenghtHorizontal - 1; indexRow++) {
@@ -94,11 +103,7 @@ class TicTacToe {
                     result += this.virtualBoard[indexRow][indexCell];
                 }
 
-                if(result === repeatString('x', this.lenghtHorizontal)) {
-                    return templateWinner('x');
-                } else if (result === repeatString('o', this.lenghtHorizontal)) {
-                    return templateWinner('o');
-                }
+                whoHasWon(result);
             }
         };
 
@@ -110,31 +115,56 @@ class TicTacToe {
                     result += this.virtualBoard[indexCell][indexRow];
                 }
 
-                if(result === repeatString('x', this.lenghtVertical)) {
-                    return templateWinner('x');
-                } else if (result === repeatString('o', this.lenghtVertical)) {
-                    return templateWinner('o');
-                }
+                whoHasWon(result);
             }
         };
 
         const winDiagonal = () => {
-            // [0][0] [1][1] [2][2]
-            // [0][2] [1][1] [2][0]
+            const normalDiagonal = () => {
+                let result = '';
+
+                for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
+                    result += this.virtualBoard[indexRow][indexRow]
+                }
+
+                whoHasWon(result);
+            };
+
+            const revertDiagonal = () => {
+                let result = '';
+
+                let currentBoard = this.virtualBoard,
+                    mirrorBoard = currentBoard.reverse();
+                for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
+                    result += mirrorBoard[indexRow][indexRow]
+                }
+
+                whoHasWon(result);
+            };
+
+            normalDiagonal();
+            revertDiagonal();
         };
 
         const draw = () => {
+            let result = '';
+            for(let indexRow = 0; indexRow <= this.lenghtHorizontal- 1; indexRow++) {
+                for(let indexCell = 0; indexCell <= this.lenghtVertical - 1; indexCell++) {
+                    if(this.virtualBoard[indexRow][indexCell]) {
+                        result += this.virtualBoard[indexRow][indexCell];
+                    }
+                }
+            }
 
+            if(result.length === 9) {
+                return templateWinner('Ничья');
+            }
         };
 
         winHorizontal();
         winVertical();
         winDiagonal();
         draw();
-    }
-
-    resultGame(winner) {
-
     }
 }
 
