@@ -11,7 +11,7 @@ class TicTacToe {
 
     choosePlayer (preTemplate = '') {
         this.templateChoosePlayer = `${preTemplate}<div class="choose-players">
-                                       <div class="title">Выберите игрока</div>
+                                       <div class="title">Choose player</div>
                                        <div class="players">
                                          <a href="#" class="player" data-player="x">x</a>
                                          <a href="#" class="player" data-player="o">o</a>
@@ -86,85 +86,46 @@ class TicTacToe {
             return this.choosePlayer(winnerTemplate);
         };
 
-        const whoHasWon = (result) => {
-            if(result === repeatString('x', this.lenghtVertical)) {
-                return templateWinner('Победитель x');
-            } else if (result === repeatString('o', this.lenghtVertical)) {
-                return templateWinner('Победитель o');
+        const whoHasWon = (result1, result2, fullFilled) => {
+            if(result1 === repeatString('x', this.lenghtVertical) || result2 === repeatString('x', this.lenghtVertical)) {
+                return templateWinner('Winner x');
+            } else if (result1 === repeatString('o', this.lenghtVertical) || result2 === repeatString('o', this.lenghtVertical)) {
+                return templateWinner('Winner o');
+            } else if(fullFilled === 27) {
+                return templateWinner('Draw');
             }
         };
 
 
-        const winHorizontal = () => {
+        const defineWinner = () => {
+            let resultDiagonalNormal = '',
+                resultDiagonalReverse = '',
+                drawStatus = 0,
+                currentBoard = this.virtualBoard.slice(),
+                mirrorBoard = currentBoard.reverse();
+
             for(let indexRow = 0; indexRow <= this.lenghtHorizontal - 1; indexRow++) {
-                let row = this.virtualBoard[indexRow];
-                let result = '';
+                let row = this.virtualBoard[indexRow],
+                    resultHorizontal = '',
+                    resultVertical = '';
+
+                resultDiagonalNormal += this.virtualBoard[indexRow][indexRow] ? this.virtualBoard[indexRow][indexRow] : '';
+                resultDiagonalReverse += mirrorBoard[indexRow][indexRow] ? mirrorBoard[indexRow][indexRow] : '';
+
                 for(let indexCell = 0; indexCell <= row.length - 1; indexCell++) {
-                    result += this.virtualBoard[indexRow][indexCell];
+                    resultHorizontal += this.virtualBoard[indexRow][indexCell] ? this.virtualBoard[indexRow][indexCell] : '';
+                    resultVertical += this.virtualBoard[indexCell][indexRow] ? this.virtualBoard[indexCell][indexRow] : '';
                 }
 
-                whoHasWon(result);
-            }
-        };
+                drawStatus += resultHorizontal.length * resultVertical.length;
 
-        const winVertical = () => {
-            for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
-                let row = this.virtualBoard[indexRow];
-                let result = '';
-                for(let indexCell = 0; indexCell <= row.length - 1; indexCell++) {
-                    result += this.virtualBoard[indexCell][indexRow];
-                }
-
-                whoHasWon(result);
-            }
-        };
-
-        const winDiagonal = () => {
-            const normalDiagonal = () => {
-                let result = '';
-
-                for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
-                    result += this.virtualBoard[indexRow][indexRow]
-                }
-
-                whoHasWon(result);
-            };
-
-            const revertDiagonal = () => {
-                let result = '';
-
-                let currentBoard = this.virtualBoard,
-                    mirrorBoard = currentBoard.reverse();
-                for(let indexRow = 0; indexRow <= this.lenghtVertical - 1; indexRow++) {
-                    result += mirrorBoard[indexRow][indexRow]
-                }
-
-                whoHasWon(result);
-            };
-
-            normalDiagonal();
-            revertDiagonal();
-        };
-
-        const draw = () => {
-            let result = '';
-            for(let indexRow = 0; indexRow <= this.lenghtHorizontal- 1; indexRow++) {
-                for(let indexCell = 0; indexCell <= this.lenghtVertical - 1; indexCell++) {
-                    if(this.virtualBoard[indexRow][indexCell]) {
-                        result += this.virtualBoard[indexRow][indexCell];
-                    }
-                }
+                whoHasWon(resultHorizontal, resultVertical, drawStatus);
             }
 
-            if(result.length === 9) {
-                return templateWinner('Ничья');
-            }
+            whoHasWon(resultDiagonalNormal, resultDiagonalReverse);
         };
 
-        winHorizontal();
-        winVertical();
-        winDiagonal();
-        draw();
+        defineWinner();
     }
 }
 
